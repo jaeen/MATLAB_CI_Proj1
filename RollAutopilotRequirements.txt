@@ -1,0 +1,118 @@
+Roll Autopilot Functional Requirements
+
+This document contains requirements applying to a roll control component of an autopilot controller. It is an example artifact for ARP-4754 Section 5.2.2; Functional Requirements.
+
+
+1. Roll Autopilot Requirements
+
+
+1.1. Roll Autopilot Engage Control
+
+    REQUIREMENT
+    1.1.1 Roll Autopilot shall engage when the pilot selects the autopilot engage switch in the cockpit and disengage when the switch is deselected. When not engaged, the command to the roll actuator shall be zero.
+
+    RATIONALE
+    The autopilot should only be engaged when the pilot selects it.
+
+
+1.2 Roll Hold Mode
+
+    REQUIREMENT
+    1.2.1 Roll hold mode shall be the active mode whenever the autopilot is engaged and no other lateral mode is active.
+
+    RATIONALE
+    Roll hold mode is the default mode in the roll axis for the autopilot when no other mode is active.
+
+
+1.3 Roll Hold Reference
+        Navigate to test harness using MATLAB command:
+        web('http://localhost:31415/matlab/feval/rmiobjnavigate?arguments=[%22RollAutopilotMdlRef:urn:uuid:523e5d2d-bb86-43b2-a187-43c52a2bc174.slx%22,%22GIDa_3fe26a28_ee1e_4aff_b1cd_3303ca12539c%22]')
+
+    REQUIREMENT
+    1.3.1 When roll hold mode becomes the active mode the roll hold reference shall be set to the actual roll attitude of the aircraft, except under the following conditions:
+        Navigate to test step using MATLAB command:
+        web('http://localhost:31415/matlab/feval/rmiobjnavigate?arguments=[%22RollAutopilotMdlRef:urn:uuid:523e5d2d-bb86-43b2-a187-43c52a2bc174.slx%22,%22GIDa_83453c2a_9822_4c1b_802c_910b2715a203%22]')
+
+    1.3.1.1. The roll hold reference shall be set to zero if the actual roll angle is less than 6 degrees, in either direction, at the time of roll hold engagement.
+        Navigate to test step using MATLAB command:
+        web('http://localhost:31415/matlab/feval/rmiobjnavigate?arguments=[%22RollAutopilotMdlRef:urn:uuid:523e5d2d-bb86-43b2-a187-43c52a2bc174.slx%22,%22GIDa_bb60ecba_c9ff_4e6a_826a_bbc6e66edf81%22]')
+
+    1.3.1.2. The roll hold reference shall be set to 30 degrees in the same direction as the actual roll angle if the actual roll angle is greater than 30 degrees at the time of roll hold engagement.
+        Navigate to test step using MATLAB command:
+        web('http://localhost:31415/matlab/feval/rmiobjnavigate?arguments=[%22RollAutopilotMdlRef:urn:uuid:523e5d2d-bb86-43b2-a187-43c52a2bc174.slx%22,%22GIDa_560de657_62cc_4af5_82cd_5a07ae51e7a7%22]')
+
+    1.3.1.3. The roll reference shall be set to the cockpit turn knob command, up to a 30 degree limit, if the turn knob is commanding 3 degrees or more in either direction.
+        Navigate to test step using MATLAB command:
+        web('http://localhost:31415/matlab/feval/rmiobjnavigate?arguments=[%22RollAutopilotMdlRef:urn:uuid:523e5d2d-bb86-43b2-a187-43c52a2bc174.slx%22,%22GIDa_65c6d6af_47ce_4ae0_b5d9_2094509a3f95%22]')
+
+    RATIONALE
+    When engaging the mode at a small bank angle, it is assumed that the pilot wants to maintain level flight.  When the mode is engaged above the autopilot roll limit, the autopilot should control to the limit.  The turn knob will be considered to be in dent when it is less than 3 degrees.
+
+
+1.4 Roll Performance
+
+    REQUIREMENT
+    1.4.1. Steady state roll commands shall be tracked within 1 degree in calm air.
+
+    1.4.2. Response to roll step commands shall not exceed 10% overshoot in calm air.
+
+    1.4.3. Small signal (<3 degree) roll bandwidth shall be at least 0.5 rad/sec.
+
+    RATIONALE
+    These tracking, overshoot and bandwidth requirements are necessary for good roll performance in lateral modes.
+
+
+1.5 Roll Rate Limit
+
+    REQUIREMENT
+    1.5.1. The maximum roll rate for large commands shall be 6 deg/sec +/-10% in calm air.
+
+    RATIONALE
+    This roll rate allows good performance while still maintaining passenger comfort.
+
+
+1.6 Roll Angle Limit
+
+    REQUIREMENT
+    1.6.1. The maximum roll angle allowed shall be 30 deg +/-10% in calm air.
+
+    RATIONALE
+    This roll angle allows good turn rate while still maintaining passenger comfort.
+
+
+1.7 Aileron Angle Limit
+
+    REQUIREMENT
+    1.7.1. The maximum aileron command allowed shall be 15 deg.
+
+    RATIONALE
+    This is the maximum deflection allowed by the mechanical control system.
+
+
+1.8 Heading Hold Mode
+
+    REQUIREMENT
+    1.8.1. Heading Hold shall become the active mode when the pilot selects the heading switch in the cockpit and deactivate when the switch is deselected.
+
+    RATIONALE
+    Heading hold mode will be the active mode when selected by the pilot.
+
+
+1.9 Heading Hold Reference
+
+    REQUIREMENT
+    1.9.1. When heading hold mode becomes the active mode the heading hold reference shall be set by the pilot via a cockpit control.
+
+    RATIONALE
+    The pilot will select the desired heading to track via the cockpit control.
+
+
+1.10 Heading Performance
+
+    REQUIREMENT
+    1.10.1. Steady state heading commands shall be tracked within 1 degree in calm air.
+
+    Response to heading step commands shall not exceed 10% overshoot in calm air.
+
+    RATIONALE
+    These tracking and overshoot requirements are necessary for good heading performance.
